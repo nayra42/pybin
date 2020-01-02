@@ -12,6 +12,7 @@ import urllib
 import os
 import smtplib
 import logging
+import datetime
 
 ##LOGING CONFIG BLOCK
 #make a filelogger
@@ -21,9 +22,9 @@ filelogger = logging.getLogger(__name__)
 #set logging level - info
 filelogger.setLevel(logging.INFO)
 #setup handler
-filelogger_handler = logging.FileHandler("/opt/pybin/python/pybin.log")
+filelogger_handler = logging.FileHandler("/opt/pybin/python/pybin/pybin.log")
 #format logs
-filelogger_format = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s", datefmt="%Y-%m-%d %H:%M:%S %Z")
+filelogger_format = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
 # Apply the formatter to the handler
 filelogger_handler.setFormatter(filelogger_format)
 # Apply the handler to the logger
@@ -59,12 +60,12 @@ while True:
 #read historical list from file into memory
         #with open(os.path.join('/opt/pybin/python/files/keys/',"scrapedKeys"+".txt"), 'a+') as f:
         try:
-            with open('/opt/pybin/python/files/keys/scrapedKeys.txt') as f:
+            with open('/opt/pybin/python/pybin/files/keys/scrapedKeys.txt') as f:
                 scrapedKeys = f.readlines()
             filelogger.debug(scrapedKeys)
             #input
         except IOError:
-            with open('/opt/pybin/python/files/keys/scrapedKeys.txt', 'w+')  as f:     
+            with open('/opt/pybin/python/pybin/files/keys/scrapedKeys.txt', 'w+')  as f:     
                 pass
 
 #remove line break char
@@ -83,12 +84,12 @@ while True:
        #print(scrapedList)#print keys to scrape
 
 #Append scrapedKeys File
-        with open(os.path.join('/opt/pybin/python/files/keys/',"scrapedKeys"+".txt"), 'a+') as f:
+        with open(os.path.join('/opt/pybin/python/pybin/files/keys/',"scrapedKeys"+".txt"), 'a+') as f:
             for item in scrapedList:
                 f.write("%s\n" % item)
 
 #write to scraped list
-        with open(os.path.join('/opt/pybin/python/files/keys/',"scrapedList"+".txt"), 'w+') as f:
+        with open(os.path.join('/opt/pybin/python/pybin/files/keys/',"scrapedList"+".txt"), 'w+') as f:
             for item in scrapedList:
                  f.write("%s\n" % item)
 
@@ -102,6 +103,7 @@ while True:
             #print(k,v)#test print of dict with pastes
  
         #print("             ")#spacer
+        #here you can replace this with regex for what you are looking for in this case the word password is simple for testing and finding interesting stuff.
         refilter = re.compile(r'(?is)password')
 
         for x,y in pageDict.items():
@@ -111,8 +113,8 @@ while True:
     #print(len(result))
             if len(result) >= 1:
                 sep = "*" * 30
-                with open(os.path.join('/opt/pybin/python/files/pastes/',"pasteList"+".txt"), 'a+') as f:
-                    f.write("\n{0}\n{1}\n{2}".format(x,result[0],sep))
+                with open(os.path.join('/opt/pybin/python/pybin/files/pastes/',"pasteList"+".txt"), 'a+') as f:
+                    f.write("\n{0} Paste Key: {1} Search Result: {2} URL: {3}".format(datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"),x,result[0], f"https://pastebin.com/{x}"))
     
         time.sleep(1)
     
